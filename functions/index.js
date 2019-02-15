@@ -23,14 +23,13 @@ app.use((req, res, next) => {
 app.use(bodyparser.json());
 
 
-
 let connection = mysql.createPool({
-    host: '34.73.26.39',
+    host: '34.73.192.165',
     user: 'haja',
     password: 'haja10000',
     database: 'webster'
-
 });
+
 
 connection.getConnection((err) => {
     if (!err)
@@ -87,14 +86,10 @@ app.get('/createexcel', (req, res) => {
 
 
 app.get('/ta', (req, res) => {
-    connection.query('select userid, DATE_FORMAT(checktime, "%W, %M %e %Y") checkdate,  time(min(checktime)) checkintime, time(max(checktime)) checkouttime, serialno from webster.webster_checkinout group by userid, date(checktime)', (error, results, fields) => {
-        // connection.query('select userid, date(checktime) checkdate,  time(min(checktime)) checkintime, time(max(checktime)) checkouttime, serialno from webster.webster_checkinout group by userid, date(checktime)', (error, results, fields)=>{
-        // connection.query('SELECT * FROM webster_checkinout', (error, results, fields)=>{
-
-        // 
-        //             select   userid, date(checktime), time(checktime), min(checktime), max(checktime)
-        //  from webster.webster_checkinout group by userid, date(checktime);
-
+    // connection.query('select userid, DATE_FORMAT(checktime, "%W, %M %e %Y") checkdate,  time(min(checktime)) checkintime, time(max(checktime)) checkouttime, serialno from webster.webster_checkinout group by userid, date(checktime)', (error, results, fields)=>{
+    // connection.query('select webster.webster_checkinout.userid, webster.webster_userinfo.name, DATE_FORMAT(webster.webster_checkinout.checktime, "%W, %M %e %Y") as checkdate, time(min(webster.webster_checkinout.checktime)) as checkintime, time(max(webster.webster_checkinout.checktime)) as checkouttime, webster.webster_checkinout.serialno from webster.webster_checkinout INNER join webster.webster_userinfo ON webster.webster_checkinout.userid=webster.webster_userinfo.userid group by webster.webster_checkinout.userid, date(webster.webster_checkinout.checktime)', (error, results, fields)=>{
+        connection.query('SELECT * FROM webster.vwta', (error, results, fields)=>{
+    
         if (!error)
             res.send(results);
         else
